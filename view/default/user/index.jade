@@ -1,0 +1,18 @@
+extends ./userlayout
+
+block user-form
+  - if ($user['uid'] == $_G['uid'] && $_G['member']['emailstatus'] == 0)
+    .ui.error.message
+      .header Activate
+      | Please check your email and activate your account!
+  .ui.raised.segment
+    .ui.ribbon.label Group
+    p
+      a.ui.icon.label(href='/user/group/#{user['groupid']}')
+        i.users.icon
+        | Group
+    .ui.ribbon.label Bio
+    if (user['profile']['bio'])
+      .ui.info.message= user['profile']['bio']
+    else
+      .ui.info.message No Introduction...

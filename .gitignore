@@ -1,0 +1,7 @@
+/data/install.lock
+
+/data/log/*.php
+/data/cache/view/*.php
+/data/attach/avatar/*.jpg
+
+/src/conf/global-production.php

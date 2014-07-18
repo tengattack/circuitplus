@@ -1,0 +1,103 @@
+extends ../common/layout
+
+block bodyheader
+  include searchheader
+
+block stylesheet
+
+block script
+  script(src='/static/js/searchbox.js?v=#{_G['version']['js']}')
+  script(type='text/javascript').
+    var classifications = !{json_classifications};
+    var tags = !{json_tags};
+  script(src='/static/js/circuit-upload.js?v=#{_G['version']['js']}')
+
+block content
+  include sidebar
+  .ui.piled.segment
+    h2.header Upload
+    if (_G['uid'])
+      if (_G['member']['groupid'] < 1)
+        .ui.message You have no permission to upload a circuit.
+      else
+        form.ui.form#upload_form(action='/circuit/upload/submit', method='POST')
+          div(style='display:none')
+            input(type='hidden', name='formhash', value=_G['formhash'])
+          h2.ui.dividing.header Basic information
+          .field
+            label Name
+            input(type="text", placeholder='Name', name='circuit[name]')
+          .field
+            label Author
+            input(type="text", placeholder='Author', name='circuit[author]')
+          .field
+            label Classification
+            input#class_id(type='hidden', name='circuit[subclass_id]')
+            .ui.selection.dropdown#class0
+              .text Select
+              i.dropdown.icon
+              .menu
+          .field
+            label Tags
+            .tag-input(style='display:none;')
+            .tag-wrapper
+            p
+            .ui.selection.dropdown#tag_add
+              .text Select
+              i.dropdown.icon
+              .menu
+              .ui.icon.button
+                i.add.icon
+          .field
+            label Description
+            textarea(name='circuit[description]')
+          //.field
+            label Chassis
+            input(type="text", name='circuit[chassis]')
+          //.field
+            label Plasmids
+            .ui.action.input
+              input(type="text", name='circuit[plasmid][0]')
+              .ui.icon.button
+                i.add.icon
+
+          h2.ui.dividing.header Circuit construct
+          //.field
+            label Coding frame
+            table.ui.sortable.table.segment
+              thead
+                tr
+                  th id
+                  th Input
+                  th Output
+                  th Transcription state
+              tbody
+            button.ui.icon.button
+              i.add.icon
+          //.field
+            label Parts
+            .ui.action.input
+              input(type="text", name='circuit[part][0]')
+              .ui.icon.button
+                i.add.icon
+          .field
+            label Input
+            input(type="text", name='circuit[input]')
+          .field
+            label Output
+            input(type="text", name='circuit[output]')
+          .field
+            label Result
+            textarea(name='circuit[result]')
+
+          h2.ui.dividing.header Reference
+          .field
+            textarea(name='circuit[reference]')
+
+          .ui.dividing.header
+          .ui.blue.submit.button#btnsubmit(class='btn btn-primary', tabindex='4', onclick='check_upload();') Submit
+    else
+      .ui.warning.message
+        | You need
+        a(href='/user/signin?redirect=/circuit/upload') Signin
+        | first!
